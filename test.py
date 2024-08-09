@@ -5,21 +5,33 @@ import PyApplicationCore
 import time
 
 class MyMod(PyApplicationCore.ApplicationModule) :
+
+  myOutput = PyApplicationCore.ScalarAccessor("/Var1")
+  myInput = PyApplicationCore.ScalarAccessor("/Var2")
+
   def mainLoop(self) :
+    val = 0
     while True:
       print(self.getName() + "::mainLoop()")
-      time.sleep(1.1)
-      self.interruption_point()
+      time.sleep(0.25)
+      self.myOutput.setAndWrite(val)
+      val = self.myInput.readAndGet()
+      print(self.getName() + " got: " + str(val))
 
 
 class MyMod2(PyApplicationCore.ApplicationModule) :
-  def mainLoop(self) :
-    for i in range(1,5):
-      print(self.getName() + "::mainLoop(): " + str(i))
-      time.sleep(1.2)
-      self.interruption_point()
 
-    print(thisDoesNotExist)
+  myInput = PyApplicationCore.ScalarAccessor("/Var1")
+  myOutput = PyApplicationCore.ScalarAccessor("/Var2")
+
+  def mainLoop(self) :
+    while True:
+      print(self.getName() + "::mainLoop()")
+      val = self.myInput.readAndGet()
+      print(self.getName() + " got: " + str(val))
+      self.myOutput.setAndWrite(val + 1)
+      if val == 15 :
+        print(thisDoesNotExist)
 
 
 mod = MyMod("SomeName")

@@ -44,6 +44,13 @@ PYBIND11_MODULE(PyApplicationCore, m)
       .def("getName", &PythonApplicationModule::getName, "HALLO!!!")
       .def("mainLoopWrapper", &PythonApplicationModule::mainLoopWrapper)
       .def("interruption_point", &PythonApplicationModule::interruption_point);
+
+  py::class_<ScalarAccessor>(m, "ScalarAccessor")
+      .def(py::init<const std::string &>())
+      .def("readAndGet", [](ScalarAccessor &self) -> int
+           { py::gil_scoped_release release;
+           return self.readAndGet(); })
+      .def("setAndWrite", &ScalarAccessor::setAndWrite);
 }
 
 /*********************************************************************************************************************/

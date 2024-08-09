@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cassert>
 
+#include <ChimeraTK/cppext/future_queue.hpp>
+
 #include <pybind11/embed.h>
 namespace py = pybind11;
 
@@ -55,6 +57,35 @@ private:
   std::string _name;
 
   bool _isRunning{false};
+};
+
+/*********************************************************************************************************************/
+
+extern std::map<std::string, cppext::future_queue<int>> accessorQueueMap;
+
+/*********************************************************************************************************************/
+
+class ScalarAccessor {
+  public:
+    ScalarAccessor(std::string name) : _name(name) {
+      if(accessorQueueMap.find(_name) == accessorQueueMap.end()) {
+        accessorQueueMap[_name] = cppext::future_queue<int>(2);
+      }
+    }
+
+    int readAndGet() {
+      int val;
+      accessorQueueMap[_name].pop_wait(val);
+      return val;
+    }
+
+    void setAndWrite(int val) {
+      accessorQueueMap[_name].push(val);
+    }
+
+    private:
+      std::string _name;
+
 };
 
 /*********************************************************************************************************************/

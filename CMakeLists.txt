@@ -4,10 +4,12 @@ project(example)
 set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 REQUIRED)
 
+find_package(ChimeraTK-cppext REQUIRED)
+
 find_program(STUBGEN stubgen REQUIRED)
 
 add_library(MockApplicationCore SHARED MockApplicationCore.cpp)
-target_link_libraries(MockApplicationCore PUBLIC pybind11::embed)
+target_link_libraries(MockApplicationCore PUBLIC pybind11::embed ChimeraTK::ChimeraTK-cppext)
 
 add_executable(example main.cpp)
 target_link_libraries(example PRIVATE MockApplicationCore)
