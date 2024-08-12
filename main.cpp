@@ -45,7 +45,7 @@ int main() {
 
         std::cout << "======= Terminate running modules" << std::endl;
         for(auto [name, var]: accessorQueueMap) {
-            var.push_exception(std::make_exception_ptr(thread_interrupted()));
+          std::visit([](auto q) { q.push_exception(std::make_exception_ptr(thread_interrupted())); }, var);
         }
 
         for (auto [name, mod] : pythonApplicationModuleStore)

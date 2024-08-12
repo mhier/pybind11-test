@@ -10,7 +10,7 @@ using namespace py::literals;
 /*********************************************************************************************************************/
 
 std::map<std::string, PythonApplicationModule *> pythonApplicationModuleStore;
-std::map<std::string, cppext::future_queue<int>> accessorQueueMap;
+std::map<std::string, userTypeTemplateVariant<the_future_queue>> accessorQueueMap;
 
 /*********************************************************************************************************************/
 
